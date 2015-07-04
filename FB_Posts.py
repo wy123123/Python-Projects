@@ -8,8 +8,8 @@ import sqlite3
 def main():
     #retrive any facebook page posts  
     list_companies = ["Name of the FB user 1","Name of the FB user 2"]
-    app_id = "1447448915558555"
-    secret = "c6102a2894e2dc0af0613243624a631d"
+    app_id = "your_id"
+    secret = "your_secret"
     graph_url = "https://graph.facebook.com/"
     #connection to database
     con = sqlite3.Connection("FB.db")
