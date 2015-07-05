@@ -7,7 +7,8 @@ import sqlite3
 
 def main():
     #retrive any facebook page posts  
-    list_companies = ["Name of the FB user 1","Name of the FB user 2"]
+    #fill in the name of the company in the list_companies if the url of a fb user is https://www.facebook.com/user1
+    list_companies = ["user1","user2"]
     app_id = "your_id"
     secret = "your_secret"
     graph_url = "https://graph.facebook.com/"
