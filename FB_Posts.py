@@ -1,6 +1,3 @@
-
-# coding: utf-8
-
 import urllib2
 import json
 import sqlite3
@@ -8,13 +5,29 @@ import sqlite3
 def main():
     #retrive any facebook page posts  
     #fill in the name of the company in the list_companies if the url of a fb user is https://www.facebook.com/user1
-    list_companies = ["user1","user2"]
-    app_id = "your_id"
-    secret = "your_secret"
+    list_companies = ["lovebonito"]
+    app_id = "1447448915558555"
+    secret = "75bb10a5327c9ae811775471b4fb4d39"
     graph_url = "https://graph.facebook.com/"
     #connection to database
-    con = sqlite3.Connection("FB.db")
+    con = sqlite3.Connection("c:/users/lovebonito/desktop/sqlite/lbFB.db")
     c = con.cursor()
+    try:
+        query = '''create table testing2 (
+        id INTEGER primary key,
+        page_name char,
+        post_id char unique,
+        post_date char,
+        post_story char,
+        post_name char,
+        No_post_likes,
+        No_comments
+        )'''
+        c.execute(query)
+        print "Table testing2 created"
+    except:
+        print "Table already exist"
+    
     for company in list_companies:      
         get_post_ids_and_time(graph_url,company,app_id,secret)
 
@@ -35,15 +48,12 @@ def create_post_url(graph_url,company, APP_ID, APP_SECRET,limit=150, since=None,
         post_url = graph_url +company+"/"+ "posts?" + "limit=" + str(limit) + post_args
         return post_url
 
-
 #construct the url for each post
 def find_post_or_comment_url(graph_url,post_id,APP_ID,APP_SECRET):
     post_args = "&access_token=" + APP_ID + "|" + APP_SECRET
     post_likes = graph_url + post_id +"/likes?summary=1"+post_args
     post_comments = graph_url + post_id +"/comments?summary=1"+post_args
     return (post_likes,post_comments)
-
-
 
 #read urls and download the data to json format
 def read_webpage_to_json(url,data='data'):
@@ -52,34 +62,6 @@ def read_webpage_to_json(url,data='data'):
     json_postdata = json.loads(readable_page)
     json_fbposts = json_postdata[data]
     return json_fbposts
-
-
-
-#create a sqlte db and table to store the data.
-con = sqlite3.Connection("FB.db")
-c = con.cursor()
-
-
-
-#create a table 
-try:
-    query = '''create table testing2 (
-id INTEGER primary key,
-page_name char,
-post_id char unique,
-post_date char,
-post_story char,
-post_name char,
-No_post_likes,
-No_comments
-)
-'''
-    c.execute(query)
-    print "Table testing2 created"
-except:
-    print "Table already exist"
-
-
 
 #get the page_name, post_id, post_date, post_story, post_name, store it to a sqlite database
 def get_post_ids_and_time(graph,company,app_id,secret):
@@ -136,7 +118,6 @@ def get_post_ids_and_time(graph,company,app_id,secret):
         latest_date = str(line_data[2])[:str(line_data[2]).find("T")]
         con.commit()
         print "Downloaded ",count,"posts from",company
-
 
 if __name__ == "__main__":
     main()
