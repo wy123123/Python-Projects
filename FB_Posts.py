@@ -1,33 +1,39 @@
 import urllib2
 import json
 import sqlite3
+#set number of posts you want to download
+N_POST = 500
+
+#set working directory
+wd = ""
+
+#create and connect to a database at wd
+con = sqlite3.Connection(wd)
+c = con.cursor()
+try:
+    query = '''create table FB_data (
+id INTEGER primary key,
+page_name char,
+post_id char unique,
+post_date char,
+post_story char,
+post_name char,
+No_post_likes,
+No_comments
+)
+'''
+    c.execute(query)
+    print "Table FB_data created"
+except:
+    print "Table already exists"
 
 def main():
     #retrive any facebook page posts  
     #fill in the name of the company in the list_companies if the url of a fb user is https://www.facebook.com/user1
-    list_companies = ["lovebonito"]
-    app_id = "1447448915558555"
-    secret = "75bb10a5327c9ae811775471b4fb4d39"
+    list_companies = ["user1"]
+    app_id = "app id"
+    secret = "your secret"
     graph_url = "https://graph.facebook.com/"
-    #connection to database
-    con = sqlite3.Connection("c:/users/lovebonito/desktop/sqlite/lbFB.db")
-    c = con.cursor()
-    try:
-        query = '''create table testing2 (
-        id INTEGER primary key,
-        page_name char,
-        post_id char unique,
-        post_date char,
-        post_story char,
-        post_name char,
-        No_post_likes,
-        No_comments
-        )'''
-        c.execute(query)
-        print "Table testing2 created"
-    except:
-        print "Table already exist"
-    
     for company in list_companies:      
         get_post_ids_and_time(graph_url,company,app_id,secret)
 
@@ -87,12 +93,12 @@ def get_post_ids_and_time(graph,company,app_id,secret):
         post_comments_data = read_webpage_to_json(post_id_page[1],"summary")
         line_data.append(post_likes_data["total_count"])
         line_data.append(post_comments_data['total_count'])
-        c.executemany("insert or ignore into testing2(page_name,Post_id,Post_date,Post_story,Post_name,No_post_likes,No_comments) values(?,?,?,?,?,?,?)",(line_data,))
+        c.executemany("insert or ignore into FB_data(page_name,Post_id,Post_date,Post_story,Post_name,No_post_likes,No_comments) values(?,?,?,?,?,?,?)",(line_data,))
         count += 1
     latest_date = str(line_data[2])[:str(line_data[2]).find("T")]
     con.commit()
     print "Downloaded ",count,"posts from",company
-    while count <1000:
+    while count < N_POST:
         print create_post_url(graph,company,app_id,secret,until=latest_date)
         posts = read_webpage_to_json(create_post_url(graph,company,app_id,secret,until=latest_date))
         for post in posts:
@@ -113,11 +119,12 @@ def get_post_ids_and_time(graph,company,app_id,secret):
             post_comments_data = read_webpage_to_json(post_id_page[1],"summary")
             line_data.append(post_likes_data["total_count"])
             line_data.append(post_comments_data['total_count'])
-            c.executemany("insert or ignore into testing2(page_name,Post_id,Post_date,Post_story,Post_name,No_post_likes,No_comments) values(?,?,?,?,?,?,?)",(line_data,))
+            c.executemany("insert or ignore into FB_data(page_name,Post_id,Post_date,Post_story,Post_name,No_post_likes,No_comments) values(?,?,?,?,?,?,?)",(line_data,))
             count += 1
         latest_date = str(line_data[2])[:str(line_data[2]).find("T")]
         con.commit()
-        print "Downloaded ",count,"posts from",company
+        print "Downloaded",count,"posts from",company
 
 if __name__ == "__main__":
     main()
+    con.close()
