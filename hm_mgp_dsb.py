@@ -86,6 +86,7 @@ if __name__ == "__main__":
             counter += 1
         print str(counter) +" "+category+" from mgblabel are downloaded"
     conn.commit()
+    print "data collection done!"
     conn.close()
 
 
