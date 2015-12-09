@@ -114,20 +114,21 @@ if __name__ == "__main__":
     #grouping function
     def grouping(dfs):
         df = dfs
-        for i in range(len(df['category'])):
-            if "one-piece" in df['category'][i].lower():
-                df['category'][i] = "One-Piece"
+        for i in range(len(df['cat'])):
+            if "one-piece" in df['cat'][i].lower():
+                df['cat'][i] = "One-Piece"
             elif ("jumpsuit" in df["name"][i].lower()) or ("playsuit" in df["name"][i].lower()):
-                df['category'][i] = "One-Piece"                             
-            elif "blazer" in  df['category'][i].lower():
-                df['category'][i] = 'Outerwear'
-            elif 'bridesmaid' in df['category'][i].lower():
-                df['category'][i] = 'Bridesmaid'
-            elif 'dress' in df['category'][i].lower():
-                df['category'][i] = 'Dress'
-            elif "jacket" in df['category'][i].lower():
-                df['category'][i] = 'Outerwear'
-    
+                df['cat'][i] = "One-Piece"                             
+            elif "blazer" in  df['cat'][i].lower():
+                df['cat'][i] = 'Outerwear'
+            elif 'bridesmaid' in df['cat'][i].lower():
+                df['cat'][i] = 'Bridesmaid'
+            elif 'dress' in df['cat'][i].lower():
+                df['cat'][i] = 'Dress'
+            elif "jacket" in df['cat'][i].lower():
+                df['cat'][i] = 'Outerwear'
+            
+            df['price'][i] =  df['price'][i].split()[-1]
         return df
     
     #SCRAPE h&m
