@@ -13,5 +13,8 @@ learning python
   
   The aim of project is to understand some of our competitor's operation pattern (e.g: the frequencey of new items, the quantity of new items, the type of items and their pricing strategy.)
   
-  The script uses the selenuim package which is way more effective to extract data from pages there the content data are not static. 
+  The script uses the selenuim package which is way more effective to extract data from pages there the content data are not static.
+  
+###ChurnRate
+  Calculate churnrate of the business, method reference:https://www.shopify.com.sg/technology/4018382-defining-churn-rate-no-really-this-actually-requires-an-entire-blog-post 
 
